@@ -14,7 +14,7 @@ class DeviceResponseJsonAdapter {
         var deviceStatus: Int? = null
         var cameraId: String? = null
         var ipAddress: String? = null
-        var counter = -2
+        var counter = -1 // counter set to -1 consume initial BEGIN_ARRAY
 
         with(reader) {
             beginArray()
@@ -31,9 +31,6 @@ class DeviceResponseJsonAdapter {
                     9 -> {
                         if (reader.peek() == NUMBER) {
                             deviceStatus = nextInt()
-                            if (deviceStatus == null) {
-                                return null
-                            }
                         }
                     }
                     13 -> {
@@ -55,6 +52,9 @@ class DeviceResponseJsonAdapter {
             }
             endArray()
         }
+        require(deviceStatus != null)
+        require(cameraId != null)
+        require(ipAddress != null)
         return arrayOf(DeviceResponse(deviceStatus, cameraId, ipAddress))
     }
 
