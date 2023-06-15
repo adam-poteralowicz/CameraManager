@@ -5,7 +5,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Device(
-    val cameraId: String,
-    val deviceStatus: Int,
-    val ipAddress: String,
+    val cameraId: String?,
+    val deviceStatus: Int?,
+    val ipAddress: String?,
 ) : Parcelable

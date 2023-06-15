@@ -48,5 +48,7 @@ object BackendModule {
     }
 
     @Provides
-    fun moshi(): Moshi = Moshi.Builder().build()
+    fun moshi(): Moshi = Moshi.Builder()
+        .add(DeviceResponseJsonAdapter())
+        .build()
 }

@@ -1,6 +1,5 @@
 package com.apap.cameraManager.presentation.viewModel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.apap.cameraManager.domain.model.Device
@@ -41,16 +40,11 @@ class MainViewModel @Inject constructor(
 
     private fun loadDevices(activeBrandSubdomain: String) = viewModelScope.launch {
         _loadingStateFlow.value = LoadingState.Pending
-        with(getDevices(activeBrandSubdomain)) {
-            if (this == null) {
-                Log.d("MainViewModel", "devices null")
-                _loadingStateFlow.value = LoadingState.Failure
-            } else {
-                Log.d("MainViewModel", "devices: $this")
-                _loadingStateFlow.value = LoadingState.Done
-                if (isNotEmpty()) {
-                    _devicesFlow.value = this
-                }
+        val devices = getDevices(activeBrandSubdomain)
+        with(devices) {
+            _loadingStateFlow.value = if (this == null) LoadingState.Failure else LoadingState.Done
+            if (this != null && isNotEmpty()) {
+                _devicesFlow.value = this.flatten()
             }
         }
     }

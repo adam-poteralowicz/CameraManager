@@ -9,5 +9,5 @@ interface DeviceService {
     @GET("https://{activeBrandSubdomain}.eagleeyenetworks.com/g/device/list")
     suspend fun getDevices(
         @Path("activeBrandSubdomain") activeBrandSubdomain: String
-    ): List<DeviceResponse>
+    ): Array<Array<DeviceResponse>>
 }

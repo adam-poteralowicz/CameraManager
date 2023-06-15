@@ -9,10 +9,12 @@ class GetDevices @Inject constructor(
     private val repository: DeviceRepository,
 ) {
 
-    suspend operator fun invoke(activeBrandSubdomain: String): List<Device>? =
+    suspend operator fun invoke(activeBrandSubdomain: String): Array<Array<Device>>? =
         if (activeBrandSubdomain.isBlank()) {
           null
-        } else repository.getDevices(activeBrandSubdomain).getOrNull().also {
+        } else repository.getDevices(activeBrandSubdomain)
+            .getOrNull()
+            .also {
             Log.d("Devices", it.toString())
         }
 }
