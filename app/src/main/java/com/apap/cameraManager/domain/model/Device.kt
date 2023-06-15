@@ -8,4 +8,8 @@ data class Device(
     val cameraId: String?,
     val deviceStatus: Int?,
     val ipAddress: String?,
-) : Parcelable
+) : Parcelable {
+    override fun toString() =
+        "CameraID: $cameraId, DeviceStatus: $deviceStatus, IP Address: $ipAddress"
+}
+

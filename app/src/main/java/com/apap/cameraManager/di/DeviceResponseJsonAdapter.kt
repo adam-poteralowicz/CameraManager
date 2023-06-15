@@ -10,20 +10,21 @@ import com.squareup.moshi.ToJson
 class DeviceResponseJsonAdapter {
 
     @FromJson
-    fun fromJson(reader: JsonReader): DeviceResponse {
+    fun fromJson(reader: JsonReader): Array<DeviceResponse>? {
         var deviceStatus: Int? = null
         var cameraId: String? = null
         var ipAddress: String? = null
-        var counter = 0
+        var counter = -2
 
         with(reader) {
+            beginArray()
             while (hasNext()) {
                 when (counter) {
                     0 -> {
                         if (reader.peek() == STRING) {
                             cameraId = nextString()
                             if (cameraId == null) {
-                                cameraId = ""
+                                return null
                             }
                         }
                     }
@@ -31,7 +32,7 @@ class DeviceResponseJsonAdapter {
                         if (reader.peek() == NUMBER) {
                             deviceStatus = nextInt()
                             if (deviceStatus == null) {
-                                deviceStatus = -1
+                                return null
                             }
                         }
                     }
@@ -39,7 +40,7 @@ class DeviceResponseJsonAdapter {
                         if (reader.peek() == STRING) {
                             ipAddress = nextString()
                             if (ipAddress == null) {
-                                ipAddress = ""
+                                return null
                             }
                         }
                     }
@@ -52,8 +53,9 @@ class DeviceResponseJsonAdapter {
                 }
                 counter++
             }
+            endArray()
         }
-        return DeviceResponse(deviceStatus, cameraId, ipAddress)
+        return arrayOf(DeviceResponse(deviceStatus, cameraId, ipAddress))
     }
 
     @ToJson

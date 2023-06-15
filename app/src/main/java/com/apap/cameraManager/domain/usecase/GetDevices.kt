@@ -13,8 +13,7 @@ class GetDevices @Inject constructor(
         if (activeBrandSubdomain.isBlank()) {
           null
         } else repository.getDevices(activeBrandSubdomain)
-            .getOrNull()
-            .also {
-            Log.d("Devices", it.toString())
-        }
+            .getOrNull().also {
+                Log.d("Devices", it?.flatten().toString())
+            }
 }

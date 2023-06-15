@@ -12,7 +12,6 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import java.net.CookieHandler
 import java.net.CookieManager
 import java.net.CookiePolicy
-import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Module
@@ -23,16 +22,12 @@ object BackendModule {
     @Singleton
     fun provideOkHttpClient(): OkHttpClient {
         val loggingInterceptor =
-            HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC)
+            HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
         val cookieHandler: CookieHandler = CookieManager().apply {
             setCookiePolicy(CookiePolicy.ACCEPT_ALL)
         }
         return OkHttpClient().newBuilder()
             .cookieJar(MyCookieJar(cookieHandler))
-            .connectTimeout(15, TimeUnit.SECONDS)
-            .readTimeout(20, TimeUnit.SECONDS)
-            .writeTimeout(20, TimeUnit.SECONDS)
-            .retryOnConnectionFailure(true)
             .addInterceptor(loggingInterceptor)
             .build()
     }
