@@ -1,5 +1,6 @@
 package com.apap.cameraManager.presentation.view
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -10,12 +11,17 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.apap.cameraManager.domain.model.Device
 import com.apap.cameraManager.presentation.viewModel.MainViewModel
+import com.apap.cameraManager.R
 
 @Composable
 fun MainScreen(
@@ -26,22 +32,30 @@ fun MainScreen(
     val devices by viewModel.devicesFlow.collectAsState()
     val state by viewModel.loadingStateFlow.collectAsState()
 
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .background(if (isSystemInDarkTheme()) Color.Black else Color.White)
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(if (isSystemInDarkTheme()) Color.Black else Color.White)
     ) {
         Toolbar()
-        LoadingComponent(
-            success = {
-                devices?.let {
-                    Column(Modifier.fillMaxWidth()) {
-                        DevicesList(it, navigateToCameraDetails)
+        Column(Modifier.align(Alignment.CenterHorizontally)) {
+            LoadingComponent(
+                idle = {
+                    CameraManagerLoadingImage()
+                },
+                success = {
+                    Column(modifier = Modifier.padding(8.dp)) {
+                        devices?.let {
+                            DevicesList(it, navigateToCameraDetails)
+                        }
                     }
-                }
-            },
-            loadingState = state,
-        )
-
+                },
+                error = {
+                    CameraManagerError()
+                },
+                loadingState = state,
+            )
+        }
     }
 }
 
@@ -64,17 +78,48 @@ fun DeviceItem(
     device: Device,
     onItemClicked: (Device) -> Unit,
 ) {
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxWidth()
-            .wrapContentHeight()
-            .padding(8.dp)
+            .height(45.dp)
+            .background(Color.DarkGray)
             .clickable {
                 onItemClicked(device)
-            }
+            },
+        contentAlignment = Alignment.Center
     ) {
-        Text(text = device.cameraId)
-        Text(text = device.ipAddress)
-        Text(text = device.deviceStatus.toString())
+        Text(text = device.deviceName.toString(), color = Color.White)
+    }
+}
+
+@Composable
+fun CameraManagerError() {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center,
+    ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Image(
+                painterResource(id = R.drawable.camera_icon),
+                contentDescription = null,
+                colorFilter = ColorFilter.tint(Color.Red)
+            )
+            Text(text = "No camera devices detected", color = Color.Red, fontSize = 24.sp)
+        }
+    }
+}
+
+@Composable
+fun CameraManagerLoadingImage() {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center,
+    ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Image(
+                painterResource(id = R.drawable.camera_icon),
+                contentDescription = null,
+            )
+        }
     }
 }
