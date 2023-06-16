@@ -1,13 +1,17 @@
 package com.apap.cameraManager.presentation.view
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.apap.cameraManager.domain.model.Device
@@ -19,12 +23,7 @@ fun CameraDetailsScreen(device: Device?) {
             .fillMaxSize()
             .background(Color.LightGray)
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-                .background(Color.White)
-        ) {
+        Column(modifier = Modifier.fillMaxWidth()) {
             device?.let {
                 CameraDetailsCard(it)
             }
@@ -32,29 +31,70 @@ fun CameraDetailsScreen(device: Device?) {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CameraDetailsCard(device: Device) {
-    CameraDetailsSpacer()
-    CameraDetailsText(device.deviceName)
-    CameraDetailsSpacer()
-    CameraDetailsText(device.cameraId)
-    CameraDetailsSpacer()
-    CameraDetailsText(device.ipAddress)
-    CameraDetailsSpacer()
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(15.dp),
+        elevation = CardDefaults.cardElevation(10.dp)
+    ) {
+        Column(
+            modifier = Modifier.padding(15.dp)
+        ) {
+            CardText(device.deviceName.toString())
+            ColoredCardTitleWithText(
+                title = "Camera ID: ",
+                text = device.cameraId.toString(),
+                color = Color.Magenta,
+            )
+            ColoredCardTitleWithText(
+                title = "IP: ",
+                text = device.ipAddress.toString(),
+                color = Color.Magenta,
+            )
+        }
+    }
 }
 
 @Composable
-fun CameraDetailsSpacer() {
-    Spacer(modifier = Modifier.height(10.dp))
-}
-
-@Composable
-fun CameraDetailsText(text: String?) {
+fun CardText(text: String, fontWeight: FontWeight = FontWeight.W600) {
     Text(
-        modifier = Modifier.padding(horizontal = 16.dp),
-        text = text.toString(),
-        fontSize = 16.sp,
-        fontWeight = FontWeight.SemiBold,
-        fontFamily = FontFamily.Monospace
+        buildAnnotatedString {
+            withStyle(
+                style = SpanStyle(
+                    fontWeight = fontWeight,
+                    fontFamily = FontFamily.SansSerif,
+                )
+            ) {
+                append(text)
+            }
+        }
+    )
+}
+
+@Composable
+fun ColoredCardTitleWithText(title: String, text: String, color: Color) {
+    Text(
+        buildAnnotatedString {
+            withStyle(
+                style = SpanStyle(
+                    fontWeight = FontWeight.W600,
+                    fontFamily = FontFamily.SansSerif,
+                    color = color,
+                )
+            ) {
+                append(title)
+            }
+            withStyle(
+                style = SpanStyle(
+                    fontWeight = FontWeight.W400,
+                    fontFamily = FontFamily.SansSerif,
+                )
+            ) {
+                append(text)
+            }
+        }
     )
 }
