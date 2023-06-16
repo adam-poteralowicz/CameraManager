@@ -4,8 +4,8 @@ import com.apap.cameraManager.data.DeviceResponse
 import com.apap.cameraManager.domain.model.Device
 
 fun DeviceResponse.toDevice(): Device {
-    val cameraId = cameraId ?: ""
-    val deviceStatus = deviceStatus ?: -1
-    val ipAddress = ipAddress ?: ""
-    return Device(cameraId, deviceStatus, ipAddress)
+    val deviceName = if (deviceName.isNullOrBlank()) "[NO DEVICE NAME]" else deviceName
+    val cameraId = if (cameraId.isNullOrBlank()) "[NO CAMERA ID]" else cameraId
+    val ipAddress = if (ipAddress.isNullOrBlank()) "[IP ADDRESS MISSING]" else ipAddress
+    return Device(deviceName, cameraId, ipAddress)
 }

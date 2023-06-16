@@ -10,11 +10,11 @@ import com.squareup.moshi.ToJson
 class DeviceResponseJsonAdapter {
 
     @FromJson
-    fun fromJson(reader: JsonReader): Array<DeviceResponse>? {
-        var deviceStatus: Int? = null
+    fun fromJson(reader: JsonReader): Array<DeviceResponse> {
+        var deviceName: String? = null
         var cameraId: String? = null
         var ipAddress: String? = null
-        var counter = -1 // counter set to -1 consume initial BEGIN_ARRAY
+        var counter = -1 // counter set to -1 to consume initial BEGIN_ARRAY
 
         with(reader) {
             beginArray()
@@ -23,22 +23,16 @@ class DeviceResponseJsonAdapter {
                     0 -> {
                         if (reader.peek() == STRING) {
                             cameraId = nextString()
-                            if (cameraId == null) {
-                                return null
-                            }
                         }
                     }
-                    9 -> {
-                        if (reader.peek() == NUMBER) {
-                            deviceStatus = nextInt()
+                    1 -> {
+                        if (reader.peek() == STRING) {
+                            deviceName = nextString()
                         }
                     }
                     13 -> {
                         if (reader.peek() == STRING) {
                             ipAddress = nextString()
-                            if (ipAddress == null) {
-                                return null
-                            }
                         }
                     }
                     else -> {
@@ -52,10 +46,10 @@ class DeviceResponseJsonAdapter {
             }
             endArray()
         }
-        require(deviceStatus != null)
+        require(deviceName != null)
         require(cameraId != null)
         require(ipAddress != null)
-        return arrayOf(DeviceResponse(deviceStatus, cameraId, ipAddress))
+        return arrayOf(DeviceResponse(deviceName, cameraId, ipAddress))
     }
 
     @ToJson

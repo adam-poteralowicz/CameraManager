@@ -5,11 +5,11 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Device(
+    val deviceName: String?,
     val cameraId: String?,
-    val deviceStatus: Int?,
     val ipAddress: String?,
 ) : Parcelable {
     override fun toString() =
-        "CameraID: $cameraId, DeviceStatus: $deviceStatus, IP Address: $ipAddress"
+        "Device Name: $deviceName, CameraID: $cameraId, IP Address: $ipAddress"
 }
 
