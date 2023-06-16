@@ -40,18 +40,12 @@ fun MainScreen(
         Toolbar()
         Column(Modifier.align(Alignment.CenterHorizontally)) {
             LoadingComponent(
-                idle = {
-                    CameraManagerLoadingImage()
-                },
                 success = {
                     Column(modifier = Modifier.padding(8.dp)) {
                         devices?.let {
                             DevicesList(it, navigateToCameraDetails)
                         }
                     }
-                },
-                error = {
-                    CameraManagerError()
                 },
                 loadingState = state,
             )
@@ -105,21 +99,6 @@ fun CameraManagerError() {
                 colorFilter = ColorFilter.tint(Color.Red)
             )
             Text(text = "No camera devices detected", color = Color.Red, fontSize = 24.sp)
-        }
-    }
-}
-
-@Composable
-fun CameraManagerLoadingImage() {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center,
-    ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Image(
-                painterResource(id = R.drawable.camera_icon),
-                contentDescription = null,
-            )
         }
     }
 }

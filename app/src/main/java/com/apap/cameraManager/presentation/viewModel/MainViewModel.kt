@@ -31,6 +31,7 @@ class MainViewModel @Inject constructor(
     }
 
     private fun initialize() = viewModelScope.launch {
+        _loadingStateFlow.value = LoadingState.Pending
         logIn()?.token?.let { token ->
             authorize(token)?.let {
                 loadDevices(it.activeBrandSubdomain)
@@ -39,7 +40,6 @@ class MainViewModel @Inject constructor(
     }
 
     private fun loadDevices(activeBrandSubdomain: String) = viewModelScope.launch {
-        _loadingStateFlow.value = LoadingState.Pending
         val devices = getDevices(activeBrandSubdomain)
         with(devices) {
             _loadingStateFlow.value = if (this == null) LoadingState.Failure else LoadingState.Done
