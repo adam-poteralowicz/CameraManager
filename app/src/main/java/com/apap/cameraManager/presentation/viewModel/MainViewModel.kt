@@ -44,7 +44,7 @@ class MainViewModel @Inject constructor(
         with(devices) {
             _loadingStateFlow.value = if (this == null) LoadingState.Failure else LoadingState.Done
             if (this != null && isNotEmpty()) {
-                _devicesFlow.value = this.flatten()
+                _devicesFlow.value = this
             }
         }
     }

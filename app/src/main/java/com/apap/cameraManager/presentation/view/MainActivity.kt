@@ -9,9 +9,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.apap.cameraManager.ui.theme.CameraManagerTheme
+import com.apap.cameraManager.util.navigateToCameraDetails
 import dagger.hilt.android.AndroidEntryPoint
 
 private const val LIST = "list"
+private const val DETAILS = "details"
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -22,7 +24,19 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 NavHost(navController = navController, startDestination = LIST) {
                     composable(LIST) {
-                        MainScreen(navigateToCameraDetails = {})
+                        MainScreen(navigateToCameraDetails = { device ->
+                            val bundle = Bundle()
+                            bundle.putParcelable("device", device)
+                            navController.navigateToCameraDetails(
+                                args = bundle,
+                                route = DETAILS,
+                            )
+                        })
+                    }
+                    composable(DETAILS) { entry ->
+                        CameraDetailsScreen(
+                            device = entry.arguments?.getParcelable("device")
+                        )
                     }
                 }
             }
