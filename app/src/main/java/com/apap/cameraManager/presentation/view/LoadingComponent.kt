@@ -20,7 +20,7 @@ fun LoadingComponent(
     idle: @Composable () -> Unit = {},
     pending: @Composable () -> Unit = { LoadingImage() },
     success: @Composable () -> Unit,
-    error: @Composable () -> Unit = { CameraManagerError() },
+    error: @Composable () -> Unit = {},
     loadingState: LoadingState,
 ) {
     AnimatedContent(targetState = loadingState) { state ->

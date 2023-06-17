@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -31,6 +32,7 @@ fun MainScreen(
 
     val devices by viewModel.devicesFlow.collectAsState()
     val state by viewModel.loadingStateFlow.collectAsState()
+    val failureCause by viewModel.failureCauseFlow.collectAsState()
 
     Column(
         modifier = Modifier
@@ -47,6 +49,7 @@ fun MainScreen(
                         }
                     }
                 },
+                error = { CameraManagerError(messageResId = failureCause.messageResId) },
                 loadingState = state,
             )
         }
@@ -87,7 +90,7 @@ fun DeviceItem(
 }
 
 @Composable
-fun CameraManagerError() {
+fun CameraManagerError(messageResId: Int) {
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center,
@@ -98,7 +101,11 @@ fun CameraManagerError() {
                 contentDescription = null,
                 colorFilter = ColorFilter.tint(Color.Red)
             )
-            Text(text = "No camera devices detected", color = Color.Red, fontSize = 24.sp)
+            Text(
+                text = LocalContext.current.getString(messageResId),
+                color = Color.Red,
+                fontSize = 24.sp
+            )
         }
     }
 }

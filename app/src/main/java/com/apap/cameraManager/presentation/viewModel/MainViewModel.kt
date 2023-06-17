@@ -3,6 +3,7 @@ package com.apap.cameraManager.presentation.viewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.apap.cameraManager.domain.model.Device
+import com.apap.cameraManager.domain.model.FailureCause
 import com.apap.cameraManager.domain.usecase.Authorize
 import com.apap.cameraManager.domain.usecase.GetDevices
 import com.apap.cameraManager.domain.usecase.LogIn
@@ -26,6 +27,9 @@ class MainViewModel @Inject constructor(
     private val _loadingStateFlow = MutableStateFlow(LoadingState.Idle)
     val loadingStateFlow = _loadingStateFlow.asStateFlow()
 
+    private val _failureCauseFlow = MutableStateFlow<FailureCause>(FailureCause.None)
+    val failureCauseFlow = _failureCauseFlow.asStateFlow()
+
     init {
         initialize()
     }
@@ -35,17 +39,30 @@ class MainViewModel @Inject constructor(
         logIn()?.token?.let { token ->
             authorize(token)?.let {
                 loadDevices(it.activeBrandSubdomain)
-            }
-        }
+            } ?: run { emitFailure(failureCause = FailureCause.Authentication) }
+        } ?: run { emitFailure(failureCause = FailureCause.Authentication) }
     }
 
     private fun loadDevices(activeBrandSubdomain: String) = viewModelScope.launch {
         val devices = getDevices(activeBrandSubdomain)
         with(devices) {
-            _loadingStateFlow.value = if (this == null) LoadingState.Failure else LoadingState.Done
+            if (this == null || isEmpty()) {
+                emitFailure(failureCause = FailureCause.Data)
+            } else {
+                emitSuccess()
+            }
             if (this != null && isNotEmpty()) {
                 _devicesFlow.value = this
             }
         }
+    }
+
+    private fun emitFailure(failureCause: FailureCause) {
+        _loadingStateFlow.value = LoadingState.Failure
+        _failureCauseFlow.value = failureCause
+    }
+
+    private fun emitSuccess() {
+        _loadingStateFlow.value = LoadingState.Done
     }
 }
