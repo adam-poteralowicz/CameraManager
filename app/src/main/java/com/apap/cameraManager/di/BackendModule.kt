@@ -18,6 +18,8 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object BackendModule {
 
+    private const val baseUrl = "https://login.eagleeyenetworks.com/g/aaa/"
+
     @Provides
     @Singleton
     fun provideOkHttpClient(): OkHttpClient {
@@ -38,7 +40,7 @@ object BackendModule {
         return Retrofit.Builder()
             .client(okHttpClient)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
-            .baseUrl("https://google.com")
+            .baseUrl(baseUrl)
             .build()
     }
 
