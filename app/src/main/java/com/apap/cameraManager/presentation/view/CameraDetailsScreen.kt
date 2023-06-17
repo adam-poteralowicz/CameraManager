@@ -1,19 +1,19 @@
 package com.apap.cameraManager.presentation.view
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import com.apap.cameraManager.R
 import com.apap.cameraManager.domain.model.Device
 
 @Composable
@@ -45,12 +45,12 @@ fun CameraDetailsCard(device: Device) {
         ) {
             CardText(device.deviceName.toString())
             ColoredCardTitleWithText(
-                title = "Camera ID: ",
+                title = LocalContext.current.getString(R.string.camera_id_title),
                 text = device.cameraId.toString(),
                 color = Color.Magenta,
             )
             ColoredCardTitleWithText(
-                title = "IP: ",
+                title = LocalContext.current.getString(R.string.ip_address_title),
                 text = device.ipAddress.toString(),
                 color = Color.Magenta,
             )
