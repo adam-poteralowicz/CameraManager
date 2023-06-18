@@ -7,5 +7,8 @@ import com.squareup.moshi.JsonClass
 data class DeviceResponse(
     @Json(name = "name") val deviceName: String?,
     @Json(name = "id") val cameraId: String?,
-    @Json(name = "ip_address") val ipAddress: String?
+    @Json(name = "service_status") val serviceStatus: String?,
+    @Json(name = "ip_address") val ipAddress: String?,
+    @Json(name = "owner_account_name") val ownerAccountName: String?,
+    @Json(name = "timezone") val timezone: String?,
 )

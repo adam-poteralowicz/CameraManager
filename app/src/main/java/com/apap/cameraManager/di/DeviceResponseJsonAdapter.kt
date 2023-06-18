@@ -13,7 +13,10 @@ class DeviceResponseJsonAdapter {
     fun fromJson(reader: JsonReader): Array<DeviceResponse> {
         var deviceName: String? = null
         var cameraId: String? = null
+        var serviceStatus: String? = null
         var ipAddress: String? = null
+        var ownerAccountName: String? = null
+        var timezone: String? = null
         var counter = -1 // counter set to -1 to consume initial BEGIN_ARRAY
 
         with(reader) {
@@ -30,9 +33,24 @@ class DeviceResponseJsonAdapter {
                             deviceName = nextString()
                         }
                     }
+                    4 -> {
+                        if (reader.peek() == STRING) {
+                            serviceStatus = nextString()
+                        }
+                    }
+                    10 -> {
+                        if (reader.peek() == STRING) {
+                            timezone = nextString()
+                        }
+                    }
                     13 -> {
                         if (reader.peek() == STRING) {
                             ipAddress = nextString()
+                        }
+                    }
+                    15 -> {
+                        if (reader.peek() == STRING) {
+                            ownerAccountName = nextString()
                         }
                     }
                     else -> {
@@ -49,7 +67,12 @@ class DeviceResponseJsonAdapter {
         require(deviceName != null)
         require(cameraId != null)
         require(ipAddress != null)
-        return arrayOf(DeviceResponse(deviceName, cameraId, ipAddress))
+        require(ownerAccountName != null)
+        require(timezone != null)
+        require(serviceStatus != null)
+        return arrayOf(
+            DeviceResponse(deviceName, cameraId, serviceStatus, ipAddress, ownerAccountName, timezone)
+        )
     }
 
     @ToJson

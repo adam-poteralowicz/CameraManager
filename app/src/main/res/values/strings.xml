@@ -4,5 +4,8 @@
     <string name="auth_failure_msg">Authentication failure</string>
     <string name="camera_id_title">Camera ID:</string>
     <string name="ip_address_title">IP:</string>
+    <string name="owner_title">Owner:</string>
+    <string name="timezone_title">Timezone:</string>
+    <string name="service_status_title">Service status:</string>
     <string name="search_bar_label">Search…</string>
 </resources>

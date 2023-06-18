@@ -150,12 +150,18 @@ class MainViewModelTest {
             Device(
                 deviceName = "Device 1",
                 ipAddress = "127.0.0.1",
+                serviceStatus = "ATTD",
                 cameraId = "0",
+                ownerAccountName = "John Doe",
+                timezone = "US/Central"
             ),
             Device(
                 deviceName = "Device 2",
                 ipAddress = "127.0.0.1",
+                serviceStatus = "ERSE",
                 cameraId = "1",
+                ownerAccountName = "Lucas Hood",
+                timezone = "US/Central"
             ),
         )
 

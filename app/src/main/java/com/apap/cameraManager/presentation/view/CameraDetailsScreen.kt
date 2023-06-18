@@ -50,8 +50,23 @@ fun CameraDetailsCard(device: Device) {
                 color = Color.Magenta,
             )
             ColoredCardTitleWithText(
+                title = LocalContext.current.getString(R.string.service_status_title),
+                text = device.serviceStatus.toString(),
+                color = Color.Magenta,
+            )
+            ColoredCardTitleWithText(
+                title = LocalContext.current.getString(R.string.timezone_title),
+                text = device.timezone.toString(),
+                color = Color.Magenta,
+            )
+            ColoredCardTitleWithText(
                 title = LocalContext.current.getString(R.string.ip_address_title),
                 text = device.ipAddress.toString(),
+                color = Color.Magenta,
+            )
+            ColoredCardTitleWithText(
+                title = LocalContext.current.getString(R.string.owner_title),
+                text = device.ownerAccountName.toString(),
                 color = Color.Magenta,
             )
         }

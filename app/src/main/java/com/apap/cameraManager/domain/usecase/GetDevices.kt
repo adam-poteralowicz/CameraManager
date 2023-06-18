@@ -11,5 +11,7 @@ class GetDevices @Inject constructor(
     suspend operator fun invoke(activeBrandSubdomain: String): List<Device>? =
         if (activeBrandSubdomain.isBlank()) {
             null
-        } else repository.getDevices(activeBrandSubdomain).getOrNull()?.flatten()
+        } else repository.getDevices(activeBrandSubdomain)
+            .getOrNull()
+            ?.flatten()
 }
