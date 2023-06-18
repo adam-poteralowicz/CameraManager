@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontFamily
@@ -37,6 +38,7 @@ fun CameraDetailsCard(device: Device, onBackPressedCallback: () -> Unit) {
     Toolbar(isBackPressAvailable = true, onBackPressedCallback = { onBackPressedCallback() })
     Card(
         modifier = Modifier
+            .testTag("camera_details_card")
             .fillMaxWidth()
             .padding(15.dp),
         elevation = CardDefaults.cardElevation(10.dp)
@@ -46,26 +48,31 @@ fun CameraDetailsCard(device: Device, onBackPressedCallback: () -> Unit) {
         ) {
             CardTitle(device.deviceName.toString())
             ColoredCardTitleWithText(
+                modifier = Modifier.testTag("camera_id_card_text"),
                 title = LocalContext.current.getString(R.string.camera_id_title),
                 text = device.cameraId.toString(),
                 color = Color.Magenta,
             )
             ColoredCardTitleWithText(
+                modifier = Modifier.testTag("service_status_card_text"),
                 title = LocalContext.current.getString(R.string.service_status_title),
                 text = device.serviceStatus.toString(),
                 color = Color.Magenta,
             )
             ColoredCardTitleWithText(
+                modifier = Modifier.testTag("timezone_card_text"),
                 title = LocalContext.current.getString(R.string.timezone_title),
                 text = device.timezone.toString(),
                 color = Color.Magenta,
             )
             ColoredCardTitleWithText(
+                modifier = Modifier.testTag("ip_address_card_text"),
                 title = LocalContext.current.getString(R.string.ip_address_title),
                 text = device.ipAddress.toString(),
                 color = Color.Magenta,
             )
             ColoredCardTitleWithText(
+                modifier = Modifier.testTag("owner_account_name_card_text"),
                 title = LocalContext.current.getString(R.string.owner_title),
                 text = device.ownerAccountName.toString(),
                 color = Color.Magenta,
@@ -75,7 +82,10 @@ fun CameraDetailsCard(device: Device, onBackPressedCallback: () -> Unit) {
 }
 
 @Composable
-fun CardTitle(text: String, fontWeight: FontWeight = FontWeight.W600) {
+fun CardTitle(
+    text: String,
+    fontWeight: FontWeight = FontWeight.W600,
+) {
     Text(
         buildAnnotatedString {
             withStyle(
@@ -86,12 +96,18 @@ fun CardTitle(text: String, fontWeight: FontWeight = FontWeight.W600) {
             ) {
                 append(text)
             }
-        }
+        },
+        modifier = Modifier.testTag("card_title")
     )
 }
 
 @Composable
-fun ColoredCardTitleWithText(title: String, text: String, color: Color) {
+fun ColoredCardTitleWithText(
+    modifier: Modifier = Modifier,
+    title: String,
+    text: String,
+    color: Color,
+) {
     Text(
         buildAnnotatedString {
             withStyle(
@@ -111,6 +127,7 @@ fun ColoredCardTitleWithText(title: String, text: String, color: Color) {
             ) {
                 append(" $text")
             }
-        }
+        },
+        modifier = modifier,
     )
 }

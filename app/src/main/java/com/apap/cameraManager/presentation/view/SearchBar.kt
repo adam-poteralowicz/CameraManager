@@ -19,12 +19,12 @@ import androidx.compose.ui.unit.dp
 import com.apap.cameraManager.R
 
 @Composable
-fun SearchBar(value: String, onValueChange: (String) -> Unit, onDone: KeyboardActionScope.() -> Unit) {
+fun SearchBar(modifier: Modifier, value: String, onValueChange: (String) -> Unit, onDone: KeyboardActionScope.() -> Unit) {
 
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
-        modifier = Modifier.fillMaxWidth().padding(start = 16.dp, end = 16.dp, bottom = 30.dp),
+        modifier = modifier.fillMaxWidth().padding(start = 16.dp, end = 16.dp, bottom = 30.dp),
         label = { SearchBarLabel() },
         singleLine = true,
         colors = setSearchBarColors(),

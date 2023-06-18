@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -44,14 +45,16 @@ fun MainScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(themeColor)
+            .testTag("main_screen")
     ) {
-        Toolbar()
+        Toolbar(modifier = Modifier.testTag("toolbar"))
         Column(Modifier.align(Alignment.CenterHorizontally)) {
             LoadingComponent(
                 success = {
                     Column(modifier = Modifier.padding(8.dp)) {
                         devices?.let { devices ->
                             SearchBar(
+                                modifier = Modifier.testTag("search_bar"),
                                 value = searchInput,
                                 onValueChange = { value ->
                                     searchInput = value
@@ -76,7 +79,7 @@ fun MainScreen(
 @Composable
 fun DevicesList(devices: List<Device>, onItemClicked: (Device) -> Unit) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.testTag("devices_list").fillMaxWidth(),
         horizontalArrangement = Arrangement.Center,
     ) {
         LazyColumn(verticalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -109,7 +112,7 @@ fun DeviceItem(
 @Composable
 fun CameraManagerError(messageResId: Int) {
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.testTag("camera_manager_error").fillMaxSize(),
         contentAlignment = Alignment.Center,
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {

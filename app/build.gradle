@@ -18,7 +18,7 @@ android {
         versionCode 1
         versionName "1.0"
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "com.apap.cameraManager.testUtils.TestRunner"
         vectorDrawables {
             useSupportLibrary true
         }
@@ -64,8 +64,9 @@ dependencies {
     debugImplementation deps.androidX.compose.uiTestManifest
 
     implementation deps.hilt.runtime
-    kapt deps.hilt.compiler
     kapt deps.androidX.hiltCompiler
+    kapt deps.hilt.compiler
+    kaptAndroidTest deps.hilt.compiler
 
     implementation deps.retrofit.core
     implementation deps.retrofit.moshiConverter
@@ -83,5 +84,7 @@ dependencies {
 
     androidTestImplementation deps.androidX.test.espresso
     androidTestImplementation deps.androidX.test.jUnit
+    androidTestImplementation deps.androidX.test.navigation
     androidTestImplementation deps.androidX.compose.uiTestJUnit
+    androidTestImplementation deps.hilt.test
 }

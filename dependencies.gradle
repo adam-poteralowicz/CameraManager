@@ -8,7 +8,6 @@ ext.versions = [
         composeMaterial: '1.0.0-alpha11',
         composeNavigation: '2.5.0',
         core: '1.7.0',
-        espresso: '3.5.1',
         hilt: '2.42',
         hiltNavigation: '1.0.0',
         jUnit: '4.13.2',
@@ -19,6 +18,7 @@ ext.versions = [
         moshi: '1.13.0',
         moshix: '0.18.3',
         moshiConverter: '2.9.0',
+        navigationTesting: '2.5.3',
         retrofit: '2.9.0',
         turbine: '0.7.0',
 ]
@@ -46,14 +46,15 @@ ext.deps = [
                 lifecycle: "androidx.lifecycle:lifecycle-runtime-ktx:$versions.lifecycle",
                 test: [
                         espresso: "androidx.test.espresso:espresso-core:$versions.espresso",
-                        espressoIntents: "androidx.test.espresso:espresso-intents:$versions.espresso",
                         jUnit: "androidx.test.ext:junit:$versions.androidXJUnit",
+                        navigation: "androidx.navigation:navigation-testing:$versions.navigationTesting",
                 ]
         ],
         assertJ: "org.assertj:assertj-core:$versions.assertJ",
         hilt: [
                 compiler: "com.google.dagger:hilt-android-compiler:$versions.hilt",
                 runtime : "com.google.dagger:hilt-android:$versions.hilt",
+                test: "com.google.dagger:hilt-android-testing:$versions.hilt",
         ],
         jUnit: "junit:junit:$versions.jUnit",
         kotlinCoroutines: [
