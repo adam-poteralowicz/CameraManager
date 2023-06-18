@@ -2,6 +2,7 @@ package com.apap.cameraManager.presentation.viewModel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import app.cash.turbine.test
+import com.apap.cameraManager.data.repository.DevicesCache
 import com.apap.cameraManager.domain.model.Authentication
 import com.apap.cameraManager.domain.model.Authorization
 import com.apap.cameraManager.domain.model.Device
@@ -29,9 +30,14 @@ class MainViewModelTest {
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    @MockK private lateinit var authorize: Authorize
-    @MockK private lateinit var getDevices: GetDevices
-    @MockK private lateinit var logIn: LogIn
+    @MockK
+    private lateinit var authorize: Authorize
+    @MockK
+    private lateinit var devicesCache: DevicesCache
+    @MockK
+    private lateinit var getDevices: GetDevices
+    @MockK
+    private lateinit var logIn: LogIn
 
     private lateinit var subject: MainViewModel
 
@@ -43,6 +49,7 @@ class MainViewModelTest {
     private fun initViewModel() {
         subject = MainViewModel(
             authorize = authorize,
+            devicesCache = devicesCache,
             getDevices = getDevices,
             logIn = logIn,
         )
@@ -138,7 +145,7 @@ class MainViewModelTest {
     }
 
     @Test
-    fun `should emit done when camera devices are found`() = runTest {
+    fun `should save devices to cache and emit done when camera devices are found`() = runTest {
         val expectedDeviceList = listOf(
             Device(
                 deviceName = "Device 1",
@@ -159,13 +166,14 @@ class MainViewModelTest {
         coEvery {
             getDevices("test")
         } returns expectedDeviceList
+        every { devicesCache.save(any()) } just runs
 
         initViewModel()
-
 
         coVerify { logIn() }
         coVerify { authorize("token") }
         coVerify { getDevices("test") }
+        verify { devicesCache.save(expectedDeviceList)}
         subject.loadingStateFlow.test {
             assertThat(expectMostRecentItem()).isEqualTo(LoadingState.Done)
             expectNoEvents()

@@ -43,7 +43,7 @@ fun CameraDetailsCard(device: Device) {
         Column(
             modifier = Modifier.padding(15.dp)
         ) {
-            CardText(device.deviceName.toString())
+            CardTitle(device.deviceName.toString())
             ColoredCardTitleWithText(
                 title = LocalContext.current.getString(R.string.camera_id_title),
                 text = device.cameraId.toString(),
@@ -59,7 +59,7 @@ fun CameraDetailsCard(device: Device) {
 }
 
 @Composable
-fun CardText(text: String, fontWeight: FontWeight = FontWeight.W600) {
+fun CardTitle(text: String, fontWeight: FontWeight = FontWeight.W600) {
     Text(
         buildAnnotatedString {
             withStyle(
@@ -93,7 +93,7 @@ fun ColoredCardTitleWithText(title: String, text: String, color: Color) {
                     fontFamily = FontFamily.SansSerif,
                 )
             ) {
-                append(text)
+                append(" $text")
             }
         }
     )

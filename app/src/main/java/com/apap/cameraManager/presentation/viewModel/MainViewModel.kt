@@ -2,6 +2,7 @@ package com.apap.cameraManager.presentation.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.apap.cameraManager.data.repository.DevicesCache
 import com.apap.cameraManager.domain.model.Device
 import com.apap.cameraManager.domain.model.FailureCause
 import com.apap.cameraManager.domain.usecase.Authorize
@@ -17,6 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val authorize: Authorize,
+    private val devicesCache: DevicesCache,
     private val getDevices: GetDevices,
     private val logIn: LogIn,
 ) : ViewModel() {
@@ -44,8 +46,8 @@ class MainViewModel @Inject constructor(
     }
 
     private fun loadDevices(activeBrandSubdomain: String) = viewModelScope.launch {
-        val devices = getDevices(activeBrandSubdomain)
-        with(devices) {
+        val getDevicesResult = getDevices(activeBrandSubdomain)
+        with(getDevicesResult) {
             if (this == null || isEmpty()) {
                 emitFailure(failureCause = FailureCause.Data)
             } else {
@@ -53,6 +55,7 @@ class MainViewModel @Inject constructor(
             }
             if (this != null && isNotEmpty()) {
                 _devicesFlow.value = this
+                devicesCache.save(this)
             }
         }
     }
@@ -64,5 +67,13 @@ class MainViewModel @Inject constructor(
 
     private fun emitSuccess() {
         _loadingStateFlow.value = LoadingState.Done
+    }
+
+    fun onDeviceSearch(input: String) {
+        val allDevices = devicesCache.retrieve()
+        if (input.isBlank() && _devicesFlow.value != allDevices) {
+            _devicesFlow.value = allDevices
+        }
+        _devicesFlow.value = allDevices.filter { it.deviceName?.contains(input) == true }
     }
 }

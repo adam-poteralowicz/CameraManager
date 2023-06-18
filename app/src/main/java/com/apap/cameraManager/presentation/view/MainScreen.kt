@@ -8,14 +8,15 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -24,6 +25,7 @@ import com.apap.cameraManager.domain.model.Device
 import com.apap.cameraManager.presentation.viewModel.MainViewModel
 import com.apap.cameraManager.R
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun MainScreen(
     viewModel: MainViewModel = hiltViewModel(),
@@ -34,18 +36,33 @@ fun MainScreen(
     val state by viewModel.loadingStateFlow.collectAsState()
     val failureCause by viewModel.failureCauseFlow.collectAsState()
 
+    val keyboardController = LocalSoftwareKeyboardController.current
+    var searchInput by rememberSaveable { mutableStateOf("") }
+    val themeColor = if (isSystemInDarkTheme()) Color.Black else Color.White
+
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(if (isSystemInDarkTheme()) Color.Black else Color.White)
+            .background(themeColor)
     ) {
         Toolbar()
         Column(Modifier.align(Alignment.CenterHorizontally)) {
             LoadingComponent(
                 success = {
                     Column(modifier = Modifier.padding(8.dp)) {
-                        devices?.let {
-                            DevicesList(it, navigateToCameraDetails)
+                        devices?.let { devices ->
+                            SearchBar(
+                                value = searchInput,
+                                onValueChange = { value ->
+                                    searchInput = value
+                                    viewModel.onDeviceSearch(value)
+                                },
+                                onDone = {
+                                    keyboardController?.hide()
+                                    viewModel.onDeviceSearch(searchInput)
+                                }
+                            )
+                            DevicesList(devices, navigateToCameraDetails)
                         }
                     }
                 },
