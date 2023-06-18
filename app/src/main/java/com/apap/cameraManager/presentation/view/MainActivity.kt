@@ -2,6 +2,7 @@ package com.apap.cameraManager.presentation.view
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
@@ -29,11 +30,16 @@ class MainActivity : ComponentActivity() {
                                 route = Route.Details,
                             )
                         })
+                        BackHandler(enabled = true) {}
                     }
                     composable(Route.Details.name) { entry ->
                         CameraDetailsScreen(
-                            device = entry.arguments?.getParcelable("device")
+                            device = entry.arguments?.getParcelable("device"),
+                            onBackPressedCallback = { onBackPressed() }
                         )
+                        BackHandler(enabled = true) {
+                            navController.navigateUp()
+                        }
                     }
                 }
             }

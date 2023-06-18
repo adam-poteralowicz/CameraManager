@@ -17,7 +17,7 @@ import com.apap.cameraManager.R
 import com.apap.cameraManager.domain.model.Device
 
 @Composable
-fun CameraDetailsScreen(device: Device?) {
+fun CameraDetailsScreen(device: Device?, onBackPressedCallback: () -> Unit = {}) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -25,7 +25,7 @@ fun CameraDetailsScreen(device: Device?) {
     ) {
         Column(modifier = Modifier.fillMaxWidth()) {
             device?.let {
-                CameraDetailsCard(it)
+                CameraDetailsCard(it, onBackPressedCallback)
             }
         }
     }
@@ -33,7 +33,8 @@ fun CameraDetailsScreen(device: Device?) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CameraDetailsCard(device: Device) {
+fun CameraDetailsCard(device: Device, onBackPressedCallback: () -> Unit) {
+    Toolbar(isBackPressAvailable = true, onBackPressedCallback = { onBackPressedCallback() })
     Card(
         modifier = Modifier
             .fillMaxWidth()
