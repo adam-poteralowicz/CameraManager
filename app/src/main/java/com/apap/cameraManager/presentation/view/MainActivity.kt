@@ -12,9 +12,6 @@ import com.apap.cameraManager.ui.theme.CameraManagerTheme
 import com.apap.cameraManager.util.navigateToCameraDetails
 import dagger.hilt.android.AndroidEntryPoint
 
-private const val LIST = "list"
-private const val DETAILS = "details"
-
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,18 +19,18 @@ class MainActivity : ComponentActivity() {
         setContent {
             CameraManagerTheme {
                 val navController = rememberNavController()
-                NavHost(navController = navController, startDestination = LIST) {
-                    composable(LIST) {
+                NavHost(navController = navController, startDestination = Route.List.name) {
+                    composable(Route.List.name) {
                         MainScreen(navigateToCameraDetails = { device ->
                             val bundle = Bundle()
                             bundle.putParcelable("device", device)
                             navController.navigateToCameraDetails(
                                 args = bundle,
-                                route = DETAILS,
+                                route = Route.Details,
                             )
                         })
                     }
-                    composable(DETAILS) { entry ->
+                    composable(Route.Details.name) { entry ->
                         CameraDetailsScreen(
                             device = entry.arguments?.getParcelable("device")
                         )
