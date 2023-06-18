@@ -62,7 +62,7 @@ fun LoadingImage() {
             verticalArrangement = Arrangement.Center,
         ) {
             Image(
-                painterResource(id = R.drawable.camera_icon),
+                painterResource(id = R.drawable.ic_camera),
                 contentDescription = null,
             )
             Spacer(modifier = Modifier.height(16.dp))

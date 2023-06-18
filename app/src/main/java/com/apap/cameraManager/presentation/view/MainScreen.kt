@@ -114,7 +114,7 @@ fun CameraManagerError(messageResId: Int) {
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Image(
-                painterResource(id = R.drawable.camera_icon),
+                painterResource(id = R.drawable.ic_camera),
                 contentDescription = null,
                 colorFilter = ColorFilter.tint(Color.Red)
             )
