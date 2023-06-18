@@ -82,9 +82,17 @@ fun DevicesList(devices: List<Device>, onItemClicked: (Device) -> Unit) {
         modifier = Modifier.testTag("devices_list").fillMaxWidth(),
         horizontalArrangement = Arrangement.Center,
     ) {
-        LazyColumn(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            items(devices) {
-                DeviceItem(it, onItemClicked)
+        if (devices.isEmpty()) {
+            Text(
+                modifier = Modifier.align(Alignment.CenterVertically),
+                text = LocalContext.current.getString(R.string.search_failure_msg),
+                color = Color.Red,
+            )
+        } else {
+            LazyColumn(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                items(devices) {
+                    DeviceItem(it, onItemClicked)
+                }
             }
         }
     }

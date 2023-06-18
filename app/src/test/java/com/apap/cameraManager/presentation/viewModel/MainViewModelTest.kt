@@ -192,4 +192,86 @@ class MainViewModelTest {
             expectNoEvents()
         }
     }
+
+    @Test
+    fun `should emit empty devices list on search failure`() = runTest {
+        val expectedDeviceList = listOf(
+            Device(
+                deviceName = "Device 1",
+                ipAddress = "127.0.0.1",
+                serviceStatus = "ATTD",
+                cameraId = "0",
+                ownerAccountName = "John Doe",
+                timezone = "US/Central"
+            ),
+            Device(
+                deviceName = "Device 2",
+                ipAddress = "127.0.0.1",
+                serviceStatus = "ERSE",
+                cameraId = "1",
+                ownerAccountName = "Lucas Hood",
+                timezone = "US/Central"
+            ),
+        )
+
+        coEvery { logIn() } returns Authentication("token")
+        coEvery {
+            authorize("token")
+        } returns Authorization("test", "id", "userId")
+        coEvery {
+            getDevices("test")
+        } returns expectedDeviceList
+        every { devicesCache.retrieve() } returns expectedDeviceList
+
+        initViewModel()
+        subject.onDeviceSearch("1!%434")
+
+        verify { devicesCache.retrieve() }
+
+        subject.devicesFlow.test {
+            assertThat(expectMostRecentItem()).isEqualTo(emptyList<Device>())
+        }
+    }
+
+    @Test
+    fun `should emit correct devices on successful search`() = runTest {
+        @Test
+        fun `should emit empty devices list on search failure`() = runTest {
+            val expectedDeviceList = listOf(
+                Device(
+                    deviceName = "Device 1",
+                    ipAddress = "127.0.0.1",
+                    serviceStatus = "ATTD",
+                    cameraId = "0",
+                    ownerAccountName = "John Doe",
+                    timezone = "US/Central"
+                ),
+                Device(
+                    deviceName = "Device 2",
+                    ipAddress = "127.0.0.1",
+                    serviceStatus = "ERSE",
+                    cameraId = "1",
+                    ownerAccountName = "Lucas Hood",
+                    timezone = "US/Central"
+                ),
+            )
+
+            coEvery { logIn() } returns Authentication("token")
+            coEvery {
+                authorize("token")
+            } returns Authorization("test", "id", "userId")
+            coEvery {
+                getDevices("test")
+            } returns expectedDeviceList
+            every { devicesCache.save(any()) } just runs
+
+            initViewModel()
+
+            subject.onDeviceSearch("2")
+
+            subject.devicesFlow.test {
+                assertThat(expectMostRecentItem()).isEqualTo(expectedDeviceList[1])
+            }
+        }
+    }
 }

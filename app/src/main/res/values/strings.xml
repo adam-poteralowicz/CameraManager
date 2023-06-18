@@ -2,6 +2,7 @@
     <string name="app_name">Camera Manager</string>
     <string name="data_failure_msg">No camera devices detected</string>
     <string name="auth_failure_msg">Authentication failure</string>
+    <string name="search_failure_msg">No search results found</string>
     <string name="camera_id_title">Camera ID:</string>
     <string name="ip_address_title">IP:</string>
     <string name="owner_title">Owner:</string>
